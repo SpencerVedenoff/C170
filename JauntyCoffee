@@ -1,0 +1,67 @@
+CREATE DATABASE JauntyCoffee;
+USE JauntyCoffee;
+
+CREATE TABLE Coffee_Shop (
+  shop_id		INT PRIMARY KEY,
+  shop_name		VARCHAR(50),
+  city			VARCHAR(50),
+  state			CHAR(2)
+  );
+  
+CREATE TABLE Supplier (
+  supplier_id			INT PRIMARY KEY,
+  company_name			VARCHAR(50),
+  country				VARCHAR(30),
+  sales_contact_name	VARCHAR(60),
+  email					VARCHAR(50) NOT NULL
+  );
+  
+CREATE TABLE Employee (
+  employee_id	INT PRIMARY KEY,
+  first_name	VARCHAR(30),
+  last_name		VARCHAR(30),
+  hire_date		DATE,
+  job_title		VARCHAR(30),
+  shop_id		INT,
+  FOREIGN KEY (shop_id) REFERENCES Coffee_Shop(shop_id)
+  );
+  
+CREATE TABLE Coffee (
+  coffee_id			INT PRIMARY KEY,
+  shop_id			INT,
+  supplier_id		INT,
+  coffee_name		VARCHAR(30),
+  price_per_pound	NUMERIC(5,2),
+  FOREIGN KEY (shop_id) REFERENCES Coffee_Shop(shop_id),
+  FOREIGN KEY (supplier_id) REFERENCES Supplier(supplier_id)
+  );
+  
+INSERT INTO Coffee_Shop
+VALUES (1, 'Seattles Best', 'Seattle', 'WA'),
+       (2, 'SF Espresso', 'San Fransico', 'CA'),
+       (3, 'Austin Brew', 'Austin', 'TX');
+       
+INSERT INTO Supplier
+VALUES
+	(1, 'Beans n More', 'Brazil', 'Bob Mills', 'Bob@beans.com'),
+    (2, 'CoffeeRama', 'USA', 'Steve Lee', 'SLee@Coffee.com'),
+    (3, 'CaffSupplyPlus', 'Thailand', 'Chris Williams', 'Chris@caffdealer.net');
+    
+INSERT INTO Employee
+VALUES
+	(1, 'Bill', 'Swanson', '2022-05-01', 'Barista', 1),
+    (2, 'Will', 'Jensen', '2022-02-02', 'Barista', 2),
+    (3, 'Jill', 'Hoolihan', '2022-03-03','Bartista', 3);
+    
+INSERT INTO Coffee
+VALUES
+	(1,1,1, 'NITRO CAFFIENE', 5.5),
+    (2,2,2, 'CRYSTAL CAFFIENE', 6.3),
+    (3,3,3, 'Actually Speed', 9.7);
+    
+CREATE VIEW  employee_info AS
+	SELECT employee_id, CONCAT(first_name, ' ', last_name) AS employee_full_name, hire_date , job_title, shop_id
+	FROM Employee;
+    
+CREATE INDEX ind_Coff
+ON Coffee(coffee_name);
